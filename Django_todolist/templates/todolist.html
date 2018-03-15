@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        <h1 align="center">To do List</h1>
+        <table class = "table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Completed</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for todo in list %}
+                <tr>
+                    <td>
+                        {{ todo.title }}
+                    </td>
+                    <td>
+                        {% if todo.completed %}
+                            <del>Finished</del>
+                        {% else %}
+                           <form action="/complete/{{ todo.id }}/">
+                               <button class="btn btn-primary" type="submit">Finish</button>
+                           </form>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="/delete/{{ todo.id }}/">
+                            <button class="btn btn-primary" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div align="center">
+            <button type="button"
+                class = "btn btn-primary"
+                data-toggle = "modal"
+                data-target = "#modal-add">
+                ADD
+            </button>
+        </div>
+
+            <div class = 'modal fade' id = 'modal-add'>
+                <form method="post">
+                    {% csrf_token %}
+                     <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">ADD Todo</h5>
+                                <button type="button"
+                                        class="close"
+                                        data-dismiss="modal"
+                                        aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">todo</span>
+                                  <input type="text"
+                                         class="form-control"
+                                         name="title"
+                                         placeholder="What do you want to do?"
+                                         aria-label="todo"
+                                         aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <input type="hidden" name="action" value="add"/>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+    </div>
+
+{% endblock %}
